@@ -1,4 +1,5 @@
 <?php
+//phpinfo();die;
 // Version
 define('VERSION', '3.1.0.0_b');
 

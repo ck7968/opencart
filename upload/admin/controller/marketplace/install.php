@@ -120,71 +120,61 @@ class ControllerMarketplaceInstall extends Controller {
 						$files[] = $file;
 					}
 				}
-	
 				// A list of allowed directories to be written to
 				$allowed = array(
 					'admin/view/image/',
 					'admin/view/javascript/',
 					'admin/view/stylesheet/',
 					'admin/view/template/',
-
+					'admin/controller',
+					'admin/language',
+					'admin/model',
 					'catalog/view/javascript/',
 					'catalog/view/theme/',
-
+					'catalog/controller',
+					'catalog/language',
+					'catalog/model',
 					'system/config/',
 					'system/library/',
 					'image/catalog/',
 					'image/payment/'
 				);
-	
 				// First we need to do some checks
 				foreach ($files as $file) {
 					$destination = str_replace('\\', '/', substr($file, strlen($directory . 'upload/')));
-	
 					$safe = false;
-	
 					foreach ($allowed as $value) {
 						if (substr($value, 0, strlen($destination)) == $destination) {
 							$safe = true;
-	
 							break;
 						}
-	
 						if (substr($destination, 0, strlen($value)) == $value) {
 							$safe = true;
-	
 							break;
 						}
 					}
-					
 					if ($safe) {
 						// Check if the copy location exists or not
 						if (substr($destination, 0, 5) == 'admin') {
 							$destination = DIR_APPLICATION . substr($destination, 6);
 						}
-	
 						if (substr($destination, 0, 7) == 'catalog') {
 							$destination = DIR_CATALOG . substr($destination, 8);
 						}
-	
 						if (substr($destination, 0, 5) == 'image') {
 							$destination = DIR_IMAGE . substr($destination, 6);
 						}
-	
 						if (substr($destination, 0, 6) == 'system') {
 							$destination = DIR_SYSTEM . substr($destination, 7);
 						}
-
 						if (substr($destination, 0, 7) == 'storage') {
 							$destination = DIR_STORAGE . substr($destination, 8);
 						}
 					} else {
 						$json['error'] = sprintf($this->language->get('error_allowed'), $destination);
-	
 						break;
 					}
 				}
-				
 				if (!$json) {
 					$this->load->model('setting/extension');
 	
